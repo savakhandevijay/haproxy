@@ -1,0 +1,85 @@
+# Stage 1: Build stage
+FROM alpine:3.24.1 AS builder
+ARG PHP_VERSION=84
+RUN apk update && apk add --no-cache bash build-base curl ca-certificates gcc g++ make libtool autoconf zlib-dev \
+    openssl-dev openldap-dev libssh2-dev supervisor curl-dev libxml2 zlib libpng libjpeg-turbo libwebp libxpm libzip openssl openldap-clients libssh2 git ghostscript gettext postfix busybox-extras  libcap
+
+# Install runtime dependencies
+RUN apk add --no-cache nginx  \
+    php${PHP_VERSION} \
+    php${PHP_VERSION}-fpm \
+    php${PHP_VERSION}-mysqli \
+    php${PHP_VERSION}-pdo_mysql \
+    php${PHP_VERSION}-mbstring \
+    php${PHP_VERSION}-bz2 \
+    php${PHP_VERSION}-bcmath \
+    php${PHP_VERSION}-calendar \
+    php${PHP_VERSION}-ctype \
+    php${PHP_VERSION}-curl \
+    php${PHP_VERSION}-dom \
+    php${PHP_VERSION}-exif \
+    php${PHP_VERSION}-fileinfo \
+    php${PHP_VERSION}-ftp \
+    php${PHP_VERSION}-gd \
+    php${PHP_VERSION}-gettext \
+    php${PHP_VERSION}-iconv \
+    php${PHP_VERSION}-opcache \
+    php${PHP_VERSION}-pecl-igbinary \
+    php${PHP_VERSION}-pecl-imagick \
+    php${PHP_VERSION}-intl \
+    php${PHP_VERSION}-pcntl \
+    php${PHP_VERSION}-pdo_sqlite \
+    php${PHP_VERSION}-phar \
+    php${PHP_VERSION}-posix \
+    php${PHP_VERSION}-session \
+    php${PHP_VERSION}-shmop \
+    php${PHP_VERSION}-simplexml \
+    php${PHP_VERSION}-soap \
+    php${PHP_VERSION}-sockets \
+    php${PHP_VERSION}-sqlite3 \
+    php${PHP_VERSION}-sysvmsg \
+    php${PHP_VERSION}-sysvsem \
+    php${PHP_VERSION}-sysvshm \
+    php${PHP_VERSION}-tokenizer \
+    php${PHP_VERSION}-xml \
+    php${PHP_VERSION}-xmlreader \
+    php${PHP_VERSION}-xmlwriter \
+    php${PHP_VERSION}-xsl \
+    php${PHP_VERSION}-zip \
+    php${PHP_VERSION}-pecl-grpc \
+    php${PHP_VERSION}-pecl-apcu \
+    php${PHP_VERSION}-pecl-memcached \
+    php${PHP_VERSION}-pecl-msgpack \
+    php${PHP_VERSION}-pecl-opentelemetry \
+    php${PHP_VERSION}-pecl-ssh2 \
+    php${PHP_VERSION}-pecl-xdebug \
+    php${PHP_VERSION}-openssl
+
+# Symlink versioned binary to standard /usr/bin/php-fpm
+RUN ln -s /usr/bin/php${PHP_VERSION} /usr/bin/php && \
+    ln -sf /usr/sbin/php-fpm${PHP_VERSION} /usr/bin/php-fpm && \
+    chmod +x /usr/sbin/php-fpm* /usr/bin/php-fpm
+
+COPY supervisord.conf /etc/supervisord.conf 
+COPY ./config/xdebug.ini /etc/php${PHP_VERSION}/conf.d/xdebug.init
+COPY ./pemkey/rootCA.pem /usr/local/share/ca-certificates/mkcert.crt
+
+# update local domain ssl certificates
+RUN update-ca-certificates
+
+# Cleanup unnecessary cache
+RUN rm -rf /var/cache/apk/*
+
+# Install Composer globally
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Verify Composer installation
+RUN composer --version
+
+# update sendmail_path to use mailhog 
+RUN echo 'sendmail_path="/usr/sbin/sendmail -bs --smtp-addr=10.204.3.99:1025 --from=noreply@mailhog.local"' > /etc/php${PHP_VERSION}/conf.d/sendmail.ini
+
+# Expose the port nginx is reachable on
+EXPOSE 80 443
+
+CMD ["/usr/bin/supervisord","-c","/etc/supervisord.conf"]
