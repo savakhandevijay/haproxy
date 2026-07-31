@@ -1,53 +1,368 @@
-## how to setup SSL certificate locally
-- create certificate using mkcert / openssl / letsencrypt (best would be mkcert)
-    - Let's Encrypt only issues certificates for publicly accessible domain names that it can validate over the internet.
-    - OpenSSL downside is that every client (browser, PHP cURL, etc.) must explicitly trust your self-signed certificate or you'll get errors like: SSL peer certificate or SSH remote key was not OK
-    - mkcert creates a local Certificate Authority (CA) and installs it into your operating system's trust store. Any certificates it generates are automatically trusted by your browser and can also be trusted inside your Docker containers.
-- Install mkcert using brew or apt command 
-- Then Install the local CA (This will create a CA certificate which you will have to add in /usr/local/share/ca-certificates/mkcert.crt of your client container and run update-ca-certificates command, so that browser will trust the certificate and wont ask you permission to allow domain)
-    - ``mkcert -install`
-- Generate a certificate for your domain
-    - `mkcert techlab.dev "*.techlab.dev"`
-    - This will create a certificate for above domain includeing wild card domain name like admin.techlab.dev , www.techlab.dev anythig api.techlab.dev
-- Create a PEM file for HAProxy
-    - HAproxy use only one pem file so you need to merge both public and private key into one file
-    - `cat techlab.dev.pem techlab.dev-key.pem > techlab.dev-haproxy.pem`
-    - cat takes the input from both file and merge into one file
-    - include this certificate in haproxy.cfg frontend section which binds the host machine port with backend server
-        - `bind :443 ssl crt /etc/haproxy/certs/techlab.dev-haproxy.pem`
-- Update your hosts file
-    - 127.0.0.1 techlab.dev api.techlab.dev www.techlab.dev
-- Trusting the certificate inside client Docker
-    - Find the root CA location using `mkcert -CAROOT`
-    - copy rootCA.pem file path , in your Dockerfile which build your client image like nginx or webserver add below line
-        > RUN apk add --no-cache ca-certificates
-        >
-        > COPY rootCA.pem /usr/local/share/ca-certificates/mkcert.crt
-        >
-        > RUN update-ca-certificates
-- With this haproxy configuration for ssl ie. bind :443 section. ssl certificate maped at frontend proxy and your backend server doesnt have to map this ssl certificate
+# Local SSL Setup for Docker, HAProxy & Nginx
 
-## For Nginx configuration
-- follow above step to install and copy root CA certificate steps
-- update nginx server conf file as mentioned below
-    -
-    > listen 443 ssl;
-    > http2 on;
-    > ssl_certificate /etc/nginx/http.d/cert/techlab.dev.pem;
-    > ssl_certificate_key /etc/nginx/http.d/cert/techlab.dev-key.pem;
+This guide explains how to configure SSL certificates for local development using **mkcert**, **HAProxy**, **Nginx**, and Docker containers.
 
-    - here ssl_certificate would be techlab.dev.pem file and ssl_certificate_key file would be techlab.dev-key.pem file
-    - alway check configuration using below command
-    - `nginx -t`  tells all the configuration are correct or not
-    - ps aux to list down all the active services nginx must be listed here
-    - if any directives in conf files are missed or wrongly mapped, nginx fails sliently and no error produce hence check nginx service are running or not always
+## Why use `mkcert`?
 
-- Check the domains are correctly mapped or not
-- Client domains those are communicating each other must be on same docker network check using docker inspect network <network_name> all the required container must be on same networks
-- to check request are communicated correctly across other container try using curl, telnet or wget command
-    - `curl -vvv https://techlab.dev`
-    - `telnet techlab.dev 443` then do `GET /`
-    - `wget -O- http://techlab.dev`
-    - `ping techlab.dev` tells where the ip address for request goes out to server
-    - check ports are available or listing using `netstat -tlnp`
-    - `getent hosts techlab.dev`  for inside the container to check hostname mapped with ip address
+There are multiple ways to generate SSL certificates:
+
+| Tool          | Suitable For             | Notes                                                                                                                   |
+| ------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| **mkcert** ✅  | Local development        | Recommended. Creates a locally trusted Certificate Authority (CA).                                                      |
+| OpenSSL       | Self-signed certificates | Browsers and applications will not trust the certificate unless the CA is manually installed.                           |
+| Let's Encrypt | Production               | Only works for publicly accessible domains that can be validated over the Internet. Not suitable for local development. |
+
+### Why `mkcert`?
+
+`mkcert` creates a local Certificate Authority (CA) and installs it into your operating system's trust store.
+
+Certificates generated using `mkcert` are trusted by:
+
+* Web browsers
+* PHP cURL
+* OpenSSL
+* Docker containers (after installing the CA certificate)
+
+This avoids common SSL errors such as:
+
+```text
+SSL peer certificate or SSH remote key was not OK
+```
+
+---
+
+# Installing mkcert
+
+## macOS
+
+```bash
+brew install mkcert
+brew install nss   # Optional, required for Firefox
+```
+
+## Ubuntu / Debian
+
+```bash
+sudo apt install mkcert
+```
+
+Refer to the official installation instructions for other operating systems if required.
+
+---
+
+# Install the Local Certificate Authority
+
+Install the local CA:
+
+```bash
+mkcert -install
+```
+
+This creates a local root CA certificate.
+
+Find its location using:
+
+```bash
+mkcert -CAROOT
+```
+
+Example output:
+
+```text
+/Users/<username>/Library/Application Support/mkcert
+```
+
+The directory contains:
+
+```text
+rootCA.pem
+rootCA-key.pem
+```
+
+> **Important:** Never distribute `rootCA-key.pem`. It is your private CA key.
+
+---
+
+# Generate a Certificate
+
+Generate a certificate for your local development domain:
+
+```bash
+mkcert techlab.dev "*.techlab.dev"
+```
+
+This creates files similar to:
+
+```text
+techlab.dev.pem
+techlab.dev-key.pem
+```
+
+The wildcard certificate allows you to use domains such as:
+
+* techlab.dev
+* [www.techlab.dev](http://www.techlab.dev)
+* api.techlab.dev
+* admin.techlab.dev
+* any-subdomain.techlab.dev
+
+---
+
+# Configure HAProxy
+
+HAProxy expects a single PEM file containing both the certificate and private key.
+
+Merge them into one file:
+
+```bash
+cat techlab.dev.pem techlab.dev-key.pem > techlab.dev-haproxy.pem
+```
+
+Configure the HAProxy frontend:
+
+```haproxy
+frontend http_front
+    bind *:80
+    bind *:443 ssl crt /etc/haproxy/certs/techlab.dev-haproxy.pem
+
+    default_backend web_servers
+```
+
+Mount the generated PEM file into the HAProxy container:
+
+```
+/etc/haproxy/certs/techlab.dev-haproxy.pem
+```
+
+> **Note:** If HAProxy terminates SSL, backend services can continue serving plain HTTP. They do not need their own SSL certificates.
+
+---
+
+# Configure Nginx (Only if Nginx Terminates SSL)
+
+If SSL is terminated at **Nginx** instead of HAProxy, configure your server block as follows:
+
+```nginx
+server {
+    listen 443 ssl;
+    http2 on;
+
+    ssl_certificate     /etc/nginx/http.d/cert/techlab.dev.pem;
+    ssl_certificate_key /etc/nginx/http.d/cert/techlab.dev-key.pem;
+
+    ...
+}
+```
+
+Where:
+
+* `ssl_certificate` → `techlab.dev.pem`
+* `ssl_certificate_key` → `techlab.dev-key.pem`
+
+Validate the configuration:
+
+```bash
+nginx -t
+```
+
+Verify Nginx is running:
+
+```bash
+ps aux | grep nginx
+```
+
+If Nginx fails to start:
+
+* Check the certificate paths.
+* Verify the SSL directives.
+* Run `nginx -t` to identify configuration errors.
+
+---
+
+# Update the Hosts File
+
+Map your local domains to localhost.
+
+Example:
+
+```text
+127.0.0.1 techlab.dev
+127.0.0.1 api.techlab.dev
+127.0.0.1 www.techlab.dev
+127.0.0.1 admin.techlab.dev
+```
+
+---
+
+# Trust the mkcert Root CA Inside Docker
+
+Applications running inside Docker containers also need to trust the local CA.
+
+Locate the root CA:
+
+```bash
+mkcert -CAROOT
+```
+
+Copy `rootCA.pem` into your Docker image:
+
+```dockerfile
+RUN apk add --no-cache ca-certificates
+
+COPY rootCA.pem /usr/local/share/ca-certificates/mkcert.crt
+
+RUN update-ca-certificates
+```
+
+This ensures applications such as PHP cURL and OpenSSL trust certificates generated by `mkcert`.
+
+---
+
+# Verify Docker Networking
+
+Containers communicating with each other must belong to the same Docker network.
+
+Inspect the network:
+
+```bash
+docker network inspect <network_name>
+```
+
+Verify that all required containers are attached to the same network.
+
+---
+
+# Useful Debugging Commands
+
+## Test HTTPS
+
+```bash
+curl -vvv https://techlab.dev
+```
+
+---
+
+## Test HTTP
+
+```bash
+wget -O- http://techlab.dev
+```
+
+---
+
+## Verify Port Connectivity
+
+```bash
+telnet techlab.dev 443
+```
+
+Then type:
+
+```text
+GET /
+```
+
+---
+
+## Check DNS Resolution
+
+```bash
+ping techlab.dev
+```
+
+Displays the IP address to which the domain resolves.
+
+---
+
+## Resolve Hostname Inside Docker
+
+```bash
+getent hosts techlab.dev
+```
+
+Useful for confirming Docker's internal DNS resolution.
+
+---
+
+## Verify Listening Ports
+
+```bash
+netstat -tlnp
+```
+
+or
+
+```bash
+ss -ltnp
+```
+
+These commands display all listening ports and the associated processes.
+
+---
+
+# Troubleshooting
+
+## SSL peer certificate or SSH remote key was not OK
+
+Usually indicates that the client does not trust the server certificate.
+
+Ensure:
+
+* `mkcert -install` has been executed.
+* `rootCA.pem` is installed inside the client container.
+* `update-ca-certificates` has been run.
+* The certificate hostname matches the requested domain.
+
+---
+
+## HAProxy Reports "Connection Refused"
+
+Example:
+
+```text
+Layer4 connection problem
+Connection refused
+```
+
+Possible causes:
+
+* Backend application is not running.
+* Backend is not listening on the expected port.
+* Containers are not on the same Docker network.
+* Incorrect backend hostname or port in `haproxy.cfg`.
+
+Verify connectivity:
+
+```bash
+wget -O- http://web1
+```
+
+or
+
+```bash
+curl http://web1
+```
+
+from inside the HAProxy container.
+
+---
+
+## Nginx Does Not Start
+
+Common reasons:
+
+* Missing SSL certificate.
+* Incorrect certificate path.
+* Invalid Nginx configuration.
+
+Always validate before restarting:
+
+```bash
+nginx -t
+```
+
+Then verify that the Nginx process is running:
+
+```bash
+ps aux | grep nginx
+```
