@@ -1,0 +1,63 @@
+2026/07/31 02:28:27 [emerg] 7#7: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:28:27 [emerg] 7#7: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:28:27 [emerg] 6#6: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:28:28 [emerg] 11#11: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:28:28 [emerg] 11#11: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:28:28 [emerg] 10#10: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:28:30 [emerg] 12#12: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:28:30 [emerg] 12#12: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:28:30 [emerg] 11#11: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:28:33 [emerg] 13#13: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:28:33 [emerg] 13#13: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:28:33 [emerg] 12#12: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:34:55 [emerg] 7#7: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:34:55 [emerg] 7#7: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:34:55 [emerg] 7#7: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:34:56 [emerg] 11#11: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:34:56 [emerg] 11#11: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:34:56 [emerg] 11#11: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:34:58 [emerg] 12#12: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:34:58 [emerg] 12#12: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:34:58 [emerg] 12#12: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:35:01 [emerg] 13#13: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:35:01 [emerg] 13#13: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:35:01 [emerg] 13#13: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:35:03 [emerg] 14#14: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:35:04 [emerg] 15#15: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:35:06 [emerg] 16#16: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:35:09 [emerg] 17#17: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:41:48 [emerg] 6#6: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:41:48 [emerg] 7#7: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:41:48 [emerg] 7#7: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:41:49 [emerg] 10#10: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:41:49 [emerg] 11#11: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:41:49 [emerg] 11#11: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:41:51 [emerg] 11#11: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:41:51 [emerg] 12#12: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:41:51 [emerg] 18#18: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:41:53 [emerg] 12#12: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:41:54 [emerg] 13#13: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:41:54 [emerg] 13#13: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:41:54 [emerg] 19#19: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:41:56 [emerg] 14#14: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:41:59 [emerg] 15#15: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:46:24 [emerg] 26#26: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/http.d/techlab.conf:1
+2026/07/31 02:55:32 [emerg] 6#6: invalid number of arguments in "ssl_certificate" directive in /etc/nginx/http.d/techlab.conf:8
+2026/07/31 02:55:32 [emerg] 6#6: invalid number of arguments in "ssl_certificate" directive in /etc/nginx/http.d/techlab.conf:8
+2026/07/31 02:55:32 [emerg] 7#7: invalid number of arguments in "ssl_certificate" directive in /etc/nginx/http.d/techlab.conf:8
+2026/07/31 02:55:33 [emerg] 10#10: invalid number of arguments in "ssl_certificate" directive in /etc/nginx/http.d/techlab.conf:8
+2026/07/31 02:55:33 [emerg] 10#10: invalid number of arguments in "ssl_certificate" directive in /etc/nginx/http.d/techlab.conf:8
+2026/07/31 02:55:33 [emerg] 11#11: invalid number of arguments in "ssl_certificate" directive in /etc/nginx/http.d/techlab.conf:8
+2026/07/31 02:55:35 [emerg] 11#11: invalid number of arguments in "ssl_certificate" directive in /etc/nginx/http.d/techlab.conf:8
+2026/07/31 02:55:35 [emerg] 11#11: invalid number of arguments in "ssl_certificate" directive in /etc/nginx/http.d/techlab.conf:8
+2026/07/31 02:55:35 [emerg] 18#18: invalid number of arguments in "ssl_certificate" directive in /etc/nginx/http.d/techlab.conf:8
+2026/07/31 02:55:38 [emerg] 12#12: invalid number of arguments in "ssl_certificate" directive in /etc/nginx/http.d/techlab.conf:8
+2026/07/31 02:55:38 [emerg] 12#12: invalid number of arguments in "ssl_certificate" directive in /etc/nginx/http.d/techlab.conf:8
+2026/07/31 02:55:38 [emerg] 19#19: invalid number of arguments in "ssl_certificate" directive in /etc/nginx/http.d/techlab.conf:8
+2026/07/31 02:55:42 [emerg] 21#21: invalid number of arguments in "ssl_certificate" directive in /etc/nginx/http.d/techlab.conf:8
+2026/07/31 03:01:15 [error] 9#9: *3 open() "/var/www/html/favicon.ico" failed (2: No such file or directory), client: 172.23.0.5, server: techlab.dev, request: "GET /favicon.ico HTTP/1.1", host: "techlab.dev", referrer: "https://techlab.dev/"
+2026/07/31 03:01:15 [error] 9#9: *3 open() "/var/www/html/404.html" failed (2: No such file or directory), client: 172.23.0.5, server: techlab.dev, request: "GET /favicon.ico HTTP/1.1", host: "techlab.dev", referrer: "https://techlab.dev/"
+2026/07/31 03:04:10 [error] 10#10: *1 open() "/var/www/html/favicon.ico" failed (2: No such file or directory), client: 172.23.0.5, server: techlab.dev, request: "GET /favicon.ico HTTP/1.1", host: "www.techlab.dev", referrer: "https://www.techlab.dev/"
+2026/07/31 03:04:10 [error] 10#10: *1 open() "/var/www/html/404.html" failed (2: No such file or directory), client: 172.23.0.5, server: techlab.dev, request: "GET /favicon.ico HTTP/1.1", host: "www.techlab.dev", referrer: "https://www.techlab.dev/"
+2026/07/31 03:31:20 [error] 9#9: *4 open() "/var/www/html/favicon.ico" failed (2: No such file or directory), client: 172.23.0.1, server: techlab.dev, request: "GET /favicon.ico HTTP/2.0", host: "www.techlab.dev:4443", referrer: "https://www.techlab.dev:4443/"
+2026/07/31 03:31:20 [error] 9#9: *4 open() "/var/www/html/404.html" failed (2: No such file or directory), client: 172.23.0.1, server: techlab.dev, request: "GET /favicon.ico HTTP/2.0", host: "www.techlab.dev:4443", referrer: "https://www.techlab.dev:4443/"

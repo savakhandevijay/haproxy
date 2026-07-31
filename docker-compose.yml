@@ -1,0 +1,79 @@
+services:
+  web1:
+    image: webserver:latest
+    container_name: web1
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - ./src/index.php:/var/www/html/index.php:ro
+      - ./configs/nginx:/etc/nginx/http.d:ro
+      - ./logs/nginx:/var/log/nginx
+    ports:
+      - "8081:80"
+      - "4443:443"
+    networks:
+      - haproxy-net
+  web2:
+    image: webserver:latest
+    container_name: web2
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - ./src/index2.php:/var/www/html/index.php:ro
+      - ./configs/nginx:/etc/nginx/http.d:ro
+      - ./logs/nginx:/var/log/nginx
+    ports:
+      - "8082:80"
+    networks:
+      - haproxy-net
+  web3:
+    image: webserver:latest
+    container_name: web3
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - ./src/index3.php:/var/www/html/index.php:ro
+      - ./configs/nginx:/etc/nginx/http.d:ro
+      - ./logs/nginx:/var/log/nginx
+    ports:
+      - "8083:80"
+    networks:
+      - haproxy-net
+  haproxy:
+    image: my-haproxy:latest
+    container_name: haproxy
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - ./configs/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+      - ./configs/haproxy/ssl:/etc/haproxy/certs:ro
+    ports:
+      - "8080:80"     # main traffic
+      - "443:443"     # main traffic
+      - "8404:8404"   # stats dashboard
+    depends_on:
+      - web1
+      - web2
+      - web3
+    networks:
+      - haproxy-net
+networks:
+  haproxy-net:
+    driver: bridge
+    name: haproxy-net
